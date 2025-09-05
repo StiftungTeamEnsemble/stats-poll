@@ -271,12 +271,12 @@ class CSVStatsVisualizer {
           // Add label
           ctx.save();
           ctx.fillStyle = "#64d2b4"; // mint
-          ctx.font = "bold 16px Rubik";
+          ctx.font = "bold 20px Rubik";
           ctx.textAlign = "center";
           ctx.fillText(
             `Median: ${stats.median.toFixed(2)}`,
             medianX,
-            yScale.top - 10,
+            yScale.top - 20,
           );
           ctx.restore();
         }
@@ -297,12 +297,12 @@ class CSVStatsVisualizer {
           // Add label
           ctx.save();
           ctx.fillStyle = "#064075"; // blue
-          ctx.font = "bold 16px Rubik";
+          ctx.font = "bold 20px Rubik";
           ctx.textAlign = "center";
           ctx.fillText(
             `Durchschnitt: ${stats.average.toFixed(2)}`,
             avgX,
-            yScale.top - 30,
+            yScale.top - 50,
           );
           ctx.restore();
         }
