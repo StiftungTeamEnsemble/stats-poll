@@ -9,6 +9,7 @@ class CSVStatsVisualizer {
     const dropZone = document.getElementById("dropZone");
     const fileInput = document.getElementById("fileInput");
     const columnSelect = document.getElementById("columnSelect");
+    const downloadButton = document.getElementById("downloadButton");
 
     // Drop zone events
     dropZone.addEventListener("click", () => fileInput.click());
@@ -22,6 +23,9 @@ class CSVStatsVisualizer {
 
     // Column selection change
     columnSelect.addEventListener("change", this.handleColumnChange.bind(this));
+
+    // Download button click
+    downloadButton.addEventListener("click", this.downloadChart.bind(this));
   }
 
   handleDragOver(e) {
@@ -259,7 +263,7 @@ class CSVStatsVisualizer {
           medianX <= xScale.right
         ) {
           ctx.save();
-          ctx.strokeStyle = "#64d2b4"; // mint
+          ctx.strokeStyle = "#064075"; // mint
           ctx.lineWidth = 4;
           ctx.setLineDash([5, 5]);
           ctx.beginPath();
@@ -270,7 +274,7 @@ class CSVStatsVisualizer {
 
           // Add label
           ctx.save();
-          ctx.fillStyle = "#64d2b4"; // mint
+          ctx.fillStyle = "#064075"; // mint
           ctx.font = "bold 20px Rubik";
           ctx.textAlign = "center";
           ctx.fillText(
@@ -392,6 +396,21 @@ class CSVStatsVisualizer {
 
   showChart() {
     document.getElementById("chartSection").style.display = "block";
+  }
+
+  downloadChart() {
+    if (!this.chart) return;
+
+    // Get the column name for the filename
+    const columnName = document.getElementById("chartTitle").textContent;
+    const sanitizedColumnName = columnName.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filename = `${sanitizedColumnName}.png`;
+
+    // Create a link element and trigger download
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = this.chart.toBase64Image('image/png', 1);
+    link.click();
   }
 
   hideChart() {

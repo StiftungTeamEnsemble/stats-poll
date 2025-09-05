@@ -137,6 +137,30 @@ h2 {
   font-weight: 700;
 }
 
+.download-btn {
+  background: var(--mint);
+  color: var(--blue);
+  border: none;
+  padding: 16px 24px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-family: "Rubik", sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.download-btn:hover {
+  background: var(--cyan);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.download-btn:active {
+  transform: translateY(0);
+}
+
 .chart-container {
   background: white;
   border-radius: 12px;
@@ -203,6 +227,11 @@ h2 {
 
   .stat-value {
     font-size: 2.2rem;
+  }
+
+  .download-btn {
+    font-size: 1.1rem;
+    padding: 14px 20px;
   }
 
   .chart-container {
