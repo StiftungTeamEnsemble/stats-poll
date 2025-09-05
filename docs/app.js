@@ -139,16 +139,23 @@ class CSVStatsVisualizer {
 
   parseDate(dateString) {
     // Parse dates in format "DD.MM.YYYY, HH:MM" or similar
-    if (!dateString || typeof dateString !== "string") return null;
+    if (!dateString || typeof dateString !== "string") {
+      console.log('Invalid dateString:', dateString);
+      return null;
+    }
 
     // Remove quotes if present
     const cleanDateString = dateString.replace(/['"]/g, "");
+    console.log('Clean date string:', cleanDateString);
 
     const match = cleanDateString.match(/(\d{1,2})\.(\d{1,2})\.(\d{4})/);
     if (match) {
       const [, day, month, year] = match;
-      return new Date(year, month - 1, day); // month is 0-indexed in JS Date
+      const parsedDate = new Date(year, month - 1, day); // month is 0-indexed in JS Date
+      console.log('Parsed date:', day, month, year, '→', parsedDate);
+      return parsedDate;
     }
+    console.log('No date match found for:', cleanDateString);
     return null;
   }
 
@@ -160,29 +167,51 @@ class CSVStatsVisualizer {
   }
 
   getFilteredData() {
-    if (!this.dateColumn) return this.csvData.data;
+    if (!this.dateColumn) {
+      console.log('No date column found');
+      return this.csvData.data;
+    }
 
     const dateFromInput = document.getElementById("dateFrom");
     const dateToInput = document.getElementById("dateTo");
 
     if (!dateFromInput.value || !dateToInput.value) {
+      console.log('Date inputs empty, returning all data');
       return this.csvData.data;
     }
 
-    const fromDate = new Date(dateFromInput.value);
-    const toDate = new Date(dateToInput.value);
+    // Parse input dates correctly - split the YYYY-MM-DD format and create dates with local timezone
+    const fromDateParts = dateFromInput.value.split('-');
+    const toDateParts = dateToInput.value.split('-');
+    
+    const fromDate = new Date(parseInt(fromDateParts[0]), parseInt(fromDateParts[1]) - 1, parseInt(fromDateParts[2]));
+    const toDate = new Date(parseInt(toDateParts[0]), parseInt(toDateParts[1]) - 1, parseInt(toDateParts[2]));
+    
     // Set time to end of day for 'to' date to include the full day
     toDate.setHours(23, 59, 59, 999);
 
-    return this.csvData.data.filter((row) => {
-      const rowDate = this.parseDate(row[this.dateColumn]);
+    console.log('Filter range:', fromDate, 'to', toDate);
+    console.log('Date column:', this.dateColumn);
+
+    const filteredData = this.csvData.data.filter((row) => {
+      const dateValue = row[this.dateColumn];
+      console.log('Row date value:', dateValue);
+      
+      const rowDate = this.parseDate(dateValue);
+      console.log('Parsed row date:', rowDate);
 
       if (!rowDate) {
+        console.log('Invalid date, excluding row');
         return false; // Exclude rows with invalid dates
       }
 
-      return rowDate >= fromDate && rowDate <= toDate;
+      const isInRange = rowDate >= fromDate && rowDate <= toDate;
+      console.log('Date comparison:', rowDate, '>=', fromDate, '&&', rowDate, '<=', toDate, '=', isInRange);
+      return isInRange;
     });
+
+    console.log('Filtered data length:', filteredData.length, 'out of', this.csvData.data.length);
+    return filteredData;
   }
 
   parseCSVLine(line) {
