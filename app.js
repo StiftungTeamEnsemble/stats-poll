@@ -173,9 +173,9 @@ class CSVStatsVisualizer {
             datasets: [{
                 label: 'Count',
                 data: sortedKeys.map(key => distribution[key]),
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
+                backgroundColor: 'rgba(0, 140, 230, 0.6)', // cyan with opacity
+                borderColor: '#008ce6', // cyan
+                borderWidth: 2
             }]
         };
 
@@ -237,8 +237,8 @@ class CSVStatsVisualizer {
                 const medianX = getXPositionForValue(stats.median);
                 if (medianX !== null && medianX >= xScale.left && medianX <= xScale.right) {
                     ctx.save();
-                    ctx.strokeStyle = 'rgba(255, 99, 132, 1)';
-                    ctx.lineWidth = 3;
+                    ctx.strokeStyle = '#64d2b4'; // mint
+                    ctx.lineWidth = 4;
                     ctx.setLineDash([5, 5]);
                     ctx.beginPath();
                     ctx.moveTo(medianX, yScale.top);
@@ -248,8 +248,8 @@ class CSVStatsVisualizer {
 
                     // Add label
                     ctx.save();
-                    ctx.fillStyle = 'rgba(255, 99, 132, 1)';
-                    ctx.font = 'bold 12px Arial';
+                    ctx.fillStyle = '#64d2b4'; // mint
+                    ctx.font = 'bold 16px Rubik';
                     ctx.textAlign = 'center';
                     ctx.fillText(`Median: ${stats.median.toFixed(2)}`, medianX, yScale.top - 10);
                     ctx.restore();
@@ -259,8 +259,8 @@ class CSVStatsVisualizer {
                 const avgX = getXPositionForValue(stats.average);
                 if (avgX !== null && avgX >= xScale.left && avgX <= xScale.right) {
                     ctx.save();
-                    ctx.strokeStyle = 'rgba(75, 192, 192, 1)';
-                    ctx.lineWidth = 3;
+                    ctx.strokeStyle = '#064075'; // blue
+                    ctx.lineWidth = 4;
                     ctx.setLineDash([10, 5]);
                     ctx.beginPath();
                     ctx.moveTo(avgX, yScale.top);
@@ -270,8 +270,8 @@ class CSVStatsVisualizer {
 
                     // Add label
                     ctx.save();
-                    ctx.fillStyle = 'rgba(75, 192, 192, 1)';
-                    ctx.font = 'bold 12px Arial';
+                    ctx.fillStyle = '#064075'; // blue
+                    ctx.font = 'bold 16px Rubik';
                     ctx.textAlign = 'center';
                     ctx.fillText(`Average: ${stats.average.toFixed(2)}`, avgX, yScale.top - 30);
                     ctx.restore();
@@ -304,10 +304,21 @@ class CSVStatsVisualizer {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Frequency'
+                            text: 'Frequency',
+                            font: {
+                                family: 'Rubik',
+                                size: 16,
+                                weight: '500'
+                            },
+                            color: '#064075' // blue
                         },
                         ticks: {
                             stepSize: 1,
+                            font: {
+                                family: 'Rubik',
+                                size: 14
+                            },
+                            color: '#064075', // blue
                             callback: function(value) {
                                 return Number.isInteger(value) ? value : '';
                             }
@@ -316,7 +327,20 @@ class CSVStatsVisualizer {
                     x: {
                         title: {
                             display: true,
-                            text: 'Value'
+                            text: 'Value',
+                            font: {
+                                family: 'Rubik',
+                                size: 16,
+                                weight: '500'
+                            },
+                            color: '#064075' // blue
+                        },
+                        ticks: {
+                            font: {
+                                family: 'Rubik',
+                                size: 14
+                            },
+                            color: '#064075' // blue
                         }
                     }
                 }

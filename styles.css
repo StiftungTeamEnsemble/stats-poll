@@ -1,3 +1,9 @@
+:root {
+    --cyan: #008ce6;
+    --mint: #64d2b4;
+    --blue: #064075;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,11 +11,12 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Rubik', sans-serif;
+    background: linear-gradient(135deg, var(--cyan) 0%, var(--blue) 100%);
     min-height: 100vh;
     padding: 20px;
     color: #333;
+    font-size: 18px;
 }
 
 .container {
@@ -22,21 +29,21 @@ body {
 }
 
 h1 {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--cyan) 0%, var(--blue) 100%);
     color: white;
     text-align: center;
-    padding: 30px;
+    padding: 40px;
     margin: 0;
-    font-size: 2.5rem;
-    font-weight: 300;
+    font-size: 3.5rem;
+    font-weight: 600;
     letter-spacing: 1px;
 }
 
 h2 {
-    color: #4a5568;
-    font-size: 1.8rem;
+    color: var(--blue);
+    font-size: 2.5rem;
     font-weight: 500;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     text-align: center;
     padding: 0 20px;
 }
@@ -46,9 +53,9 @@ h2 {
 }
 
 .drop-zone {
-    border: 3px dashed #cbd5e0;
+    border: 3px dashed var(--mint);
     border-radius: 12px;
-    padding: 60px 20px;
+    padding: 80px 20px;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -58,21 +65,21 @@ h2 {
 }
 
 .drop-zone:hover {
-    border-color: #667eea;
+    border-color: var(--cyan);
     background: #edf2f7;
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+    box-shadow: 0 10px 25px rgba(0, 140, 230, 0.15);
 }
 
 .drop-zone.drag-over {
-    border-color: #667eea;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    border-color: var(--cyan);
+    background: linear-gradient(135deg, rgba(0, 140, 230, 0.1), rgba(6, 64, 117, 0.1));
     transform: scale(1.02);
 }
 
 .drop-zone-content p {
-    font-size: 1.2rem;
-    color: #718096;
+    font-size: 1.6rem;
+    color: var(--blue);
     font-weight: 500;
 }
 
@@ -84,26 +91,27 @@ h2 {
 .controls-section label {
     display: block;
     font-weight: 600;
-    color: #4a5568;
-    margin-bottom: 8px;
-    font-size: 1.1rem;
+    color: var(--blue);
+    margin-bottom: 12px;
+    font-size: 1.4rem;
 }
 
 #columnSelect {
     width: 100%;
-    padding: 12px 16px;
-    border: 2px solid #e2e8f0;
+    padding: 16px 20px;
+    border: 2px solid var(--mint);
     border-radius: 8px;
-    font-size: 1rem;
+    font-size: 1.3rem;
     background: white;
     cursor: pointer;
     transition: border-color 0.3s ease;
+    font-family: 'Rubik', sans-serif;
 }
 
 #columnSelect:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 3px rgba(0, 140, 230, 0.1);
 }
 
 .chart-section {
@@ -120,13 +128,13 @@ h2 {
 }
 
 .stat-box {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
     color: white;
-    padding: 20px 30px;
+    padding: 30px 40px;
     border-radius: 12px;
     text-align: center;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-    min-width: 150px;
+    box-shadow: 0 8px 25px rgba(0, 140, 230, 0.3);
+    min-width: 200px;
     transition: transform 0.3s ease;
 }
 
@@ -136,15 +144,15 @@ h2 {
 
 .stat-label {
     display: block;
-    font-size: 0.9rem;
+    font-size: 1.3rem;
     font-weight: 500;
     opacity: 0.9;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
 .stat-value {
     display: block;
-    font-size: 1.8rem;
+    font-size: 2.8rem;
     font-weight: 700;
 }
 
@@ -162,11 +170,16 @@ h2 {
 @media (max-width: 768px) {
     body {
         padding: 10px;
+        font-size: 16px;
     }
 
     h1 {
+        font-size: 2.8rem;
+        padding: 30px;
+    }
+
+    h2 {
         font-size: 2rem;
-        padding: 20px;
     }
 
     .upload-section,
@@ -179,7 +192,20 @@ h2 {
     }
 
     .drop-zone {
-        padding: 40px 20px;
+        padding: 60px 20px;
+    }
+
+    .drop-zone-content p {
+        font-size: 1.4rem;
+    }
+
+    .controls-section label {
+        font-size: 1.2rem;
+    }
+
+    #columnSelect {
+        font-size: 1.1rem;
+        padding: 14px 18px;
     }
 
     .stats-container {
@@ -187,8 +213,16 @@ h2 {
     }
 
     .stat-box {
-        min-width: 120px;
-        padding: 15px 20px;
+        min-width: 150px;
+        padding: 20px 25px;
+    }
+
+    .stat-label {
+        font-size: 1.1rem;
+    }
+
+    .stat-value {
+        font-size: 2.2rem;
     }
 
     .chart-container {
@@ -199,7 +233,15 @@ h2 {
 
 @media (max-width: 480px) {
     h1 {
+        font-size: 2.2rem;
+    }
+
+    h2 {
         font-size: 1.8rem;
+    }
+
+    .drop-zone-content p {
+        font-size: 1.2rem;
     }
 
     .stats-container {
@@ -209,6 +251,6 @@ h2 {
 
     .stat-box {
         width: 100%;
-        max-width: 200px;
+        max-width: 250px;
     }
 }
