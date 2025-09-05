@@ -2,6 +2,7 @@ class CSVStatsVisualizer {
   constructor() {
     this.csvData = null;
     this.chart = null;
+    this.dateColumn = null;
     this.initializeEventListeners();
   }
 
@@ -10,6 +11,8 @@ class CSVStatsVisualizer {
     const fileInput = document.getElementById("fileInput");
     const columnSelect = document.getElementById("columnSelect");
     const downloadButton = document.getElementById("downloadButton");
+    const dateFromInput = document.getElementById("dateFrom");
+    const dateToInput = document.getElementById("dateTo");
 
     // Drop zone events
     dropZone.addEventListener("click", () => fileInput.click());
@@ -23,6 +26,16 @@ class CSVStatsVisualizer {
 
     // Column selection change
     columnSelect.addEventListener("change", this.handleColumnChange.bind(this));
+
+    // Date filter changes
+    dateFromInput.addEventListener(
+      "change",
+      this.handleDateFilterChange.bind(this),
+    );
+    dateToInput.addEventListener(
+      "change",
+      this.handleDateFilterChange.bind(this),
+    );
 
     // Download button click
     downloadButton.addEventListener("click", this.downloadChart.bind(this));
@@ -67,8 +80,109 @@ class CSVStatsVisualizer {
     }
 
     this.csvData = { headers, data };
+    this.detectDateColumn();
     this.populateColumnSelect();
     this.showControls();
+    this.setupDateFilter();
+  }
+
+  detectDateColumn() {
+    // Look for common date column names
+    const dateColumnNames = [
+      "date",
+      "Date",
+      "Datum",
+      "datum",
+      "Datum & Zeit",
+      "datum & zeit",
+    ];
+
+    for (const columnName of dateColumnNames) {
+      if (this.csvData.headers.includes(columnName)) {
+        this.dateColumn = columnName;
+        break;
+      }
+    }
+  }
+
+  setupDateFilter() {
+    if (!this.dateColumn) return;
+
+    // Show date filter section
+    document.getElementById("dateFilterSection").style.display = "block";
+
+    // Find the date range in the data
+    const dates = this.csvData.data
+      .map((row) => this.parseDate(row[this.dateColumn]))
+      .filter((date) => date !== null)
+      .sort((a, b) => a - b);
+
+    if (dates.length > 0) {
+      // Use the actual data range
+      const minDate = dates[0];
+      const maxDate = dates[dates.length - 1];
+
+      const minDateString = minDate.toISOString().split("T")[0];
+      const maxDateString = maxDate.toISOString().split("T")[0];
+
+      document.getElementById("dateFrom").value = minDateString;
+      document.getElementById("dateTo").value = maxDateString;
+    } else {
+      // Fallback to current day if no valid dates found
+      const today = new Date();
+      const todayString = today.toISOString().split("T")[0];
+
+      document.getElementById("dateFrom").value = todayString;
+      document.getElementById("dateTo").value = todayString;
+    }
+  }
+
+  parseDate(dateString) {
+    // Parse dates in format "DD.MM.YYYY, HH:MM" or similar
+    if (!dateString || typeof dateString !== "string") return null;
+
+    // Remove quotes if present
+    const cleanDateString = dateString.replace(/['"]/g, "");
+
+    const match = cleanDateString.match(/(\d{1,2})\.(\d{1,2})\.(\d{4})/);
+    if (match) {
+      const [, day, month, year] = match;
+      return new Date(year, month - 1, day); // month is 0-indexed in JS Date
+    }
+    return null;
+  }
+
+  handleDateFilterChange() {
+    const columnName = document.getElementById("columnSelect").value;
+    if (columnName) {
+      this.renderChart(columnName);
+    }
+  }
+
+  getFilteredData() {
+    if (!this.dateColumn) return this.csvData.data;
+
+    const dateFromInput = document.getElementById("dateFrom");
+    const dateToInput = document.getElementById("dateTo");
+
+    if (!dateFromInput.value || !dateToInput.value) {
+      return this.csvData.data;
+    }
+
+    const fromDate = new Date(dateFromInput.value);
+    const toDate = new Date(dateToInput.value);
+    // Set time to end of day for 'to' date to include the full day
+    toDate.setHours(23, 59, 59, 999);
+
+    return this.csvData.data.filter((row) => {
+      const rowDate = this.parseDate(row[this.dateColumn]);
+
+      if (!rowDate) {
+        return false; // Exclude rows with invalid dates
+      }
+
+      return rowDate >= fromDate && rowDate <= toDate;
+    });
   }
 
   parseCSVLine(line) {
@@ -96,7 +210,8 @@ class CSVStatsVisualizer {
   isNumericColumn(columnName) {
     if (!this.csvData) return false;
 
-    const values = this.csvData.data
+    const filteredData = this.getFilteredData();
+    const values = filteredData
       .map((row) => row[columnName])
       .filter(
         (val) => val !== "" && val !== "-" && val !== null && val !== undefined,
@@ -140,7 +255,8 @@ class CSVStatsVisualizer {
   }
 
   getNumericValues(columnName) {
-    return this.csvData.data
+    const filteredData = this.getFilteredData();
+    return filteredData
       .map((row) => parseFloat(row[columnName]))
       .filter((val) => !isNaN(val) && isFinite(val));
   }

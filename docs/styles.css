@@ -101,6 +101,45 @@ h2 {
   border-color: var(--cyan);
 }
 
+.date-filter-section {
+  margin-top: 30px;
+}
+
+.date-inputs {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.date-input-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.date-input-group label {
+  display: block;
+  font-weight: 600;
+  color: var(--blue);
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+.date-input-group input[type="date"] {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--mint);
+  border-radius: 8px;
+  font-size: 1.2rem;
+  background: white;
+  font-family: "Rubik", sans-serif;
+  color: var(--blue);
+}
+
+.date-input-group input[type="date"]:focus {
+  outline: none;
+  border-color: var(--cyan);
+}
+
 .chart-section {
   padding: 40px;
   background: white;
@@ -238,6 +277,19 @@ h2 {
     aspect-ratio: 4/3;
     padding: 15px;
   }
+
+  .date-inputs {
+    gap: 15px;
+  }
+
+  .date-input-group {
+    min-width: 180px;
+  }
+
+  .date-input-group input[type="date"] {
+    font-size: 1.1rem;
+    padding: 12px 14px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -261,5 +313,14 @@ h2 {
   .stat-box {
     width: 100%;
     max-width: 250px;
+  }
+
+  .date-inputs {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .date-input-group {
+    min-width: auto;
   }
 }
