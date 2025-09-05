@@ -1,53 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CSV Stats Visualizer</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <div class="container">
-        <h1>CSV Statistics Visualizer</h1>
-        
-        <div class="upload-section">
-            <div class="drop-zone" id="dropZone">
-                <div class="drop-zone-content">
-                    <p>Drop your CSV file here or click to select</p>
-                    <input type="file" id="fileInput" accept=".csv" hidden>
-                </div>
-            </div>
-        </div>
+      <h1>CSV Statistics Visualizer</h1>
 
-        <div class="controls-section" id="controlsSection" style="display: none;">
-            <label for="columnSelect">Select Column:</label>
-            <select id="columnSelect">
-                <option value="">Choose a numeric column...</option>
-            </select>
+      <div class="upload-section">
+        <div class="drop-zone" id="dropZone">
+          <div class="drop-zone-content">
+            <p>Drop your CSV file here or click to select</p>
+            <input type="file" id="fileInput" accept=".csv" hidden />
+          </div>
         </div>
+      </div>
 
-        <div class="chart-section" id="chartSection" style="display: none;">
-            <h2 id="chartTitle"></h2>
-            <div class="stats-container">
-                <div class="stat-box">
-                    <span class="stat-label">Average:</span>
-                    <span class="stat-value" id="averageValue">-</span>
-                </div>
-                <div class="stat-box">
-                    <span class="stat-label">Median:</span>
-                    <span class="stat-value" id="medianValue">-</span>
-                </div>
-            </div>
-            <div class="chart-container">
-                <canvas id="distributionChart"></canvas>
-            </div>
+      <div class="controls-section" id="controlsSection" style="display: none">
+        <label for="columnSelect">Select Column:</label>
+        <select id="columnSelect">
+          <option value="">Choose a numeric column...</option>
+        </select>
+      </div>
+
+      <div class="chart-section" id="chartSection" style="display: none">
+        <h2 id="chartTitle"></h2>
+        <div class="stats-container">
+          <div class="stat-box">
+            <span class="stat-label">Average:</span>
+            <span class="stat-value" id="averageValue">-</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Median:</span>
+            <span class="stat-value" id="medianValue">-</span>
+          </div>
         </div>
+        <div class="chart-container">
+          <canvas id="distributionChart"></canvas>
+        </div>
+      </div>
     </div>
 
     <script src="app.js"></script>
-</body>
+  </body>
 </html>
