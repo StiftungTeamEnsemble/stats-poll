@@ -304,10 +304,10 @@ class CSVStatsVisualizer {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Frequency',
+                            text: 'Häufigkeit',
                             font: {
                                 family: 'Rubik',
-                                size: 16,
+                                size: 24,
                                 weight: '500'
                             },
                             color: '#064075' // blue
@@ -316,7 +316,7 @@ class CSVStatsVisualizer {
                             stepSize: 1,
                             font: {
                                 family: 'Rubik',
-                                size: 14
+                                size: 24
                             },
                             color: '#064075', // blue
                             callback: function(value) {
@@ -327,10 +327,10 @@ class CSVStatsVisualizer {
                     x: {
                         title: {
                             display: true,
-                            text: 'Value',
+                            text: 'Wert',
                             font: {
                                 family: 'Rubik',
-                                size: 16,
+                                size: 24,
                                 weight: '500'
                             },
                             color: '#064075' // blue
@@ -338,7 +338,7 @@ class CSVStatsVisualizer {
                         ticks: {
                             font: {
                                 family: 'Rubik',
-                                size: 14
+                                size: 24
                             },
                             color: '#064075' // blue
                         }

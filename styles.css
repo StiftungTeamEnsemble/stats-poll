@@ -12,7 +12,7 @@
 
 body {
     font-family: 'Rubik', sans-serif;
-    background: linear-gradient(135deg, var(--cyan) 0%, var(--blue) 100%);
+    background: var(--cyan);
     min-height: 100vh;
     padding: 20px;
     color: #333;
@@ -20,18 +20,16 @@ body {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     background: white;
     border-radius: 15px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
 h1 {
-    background: linear-gradient(135deg, var(--cyan) 0%, var(--blue) 100%);
+    background: var(--blue);
     color: white;
-    text-align: center;
     padding: 40px;
     margin: 0;
     font-size: 3.5rem;
@@ -53,28 +51,19 @@ h2 {
 }
 
 .drop-zone {
-    border: 3px dashed var(--mint);
+    border: 3px solid var(--mint);
     border-radius: 12px;
     padding: 80px 20px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.3s ease;
-    background: #f7fafc;
+    background: white;
     position: relative;
     overflow: hidden;
 }
 
-.drop-zone:hover {
-    border-color: var(--cyan);
-    background: #edf2f7;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 140, 230, 0.15);
-}
-
 .drop-zone.drag-over {
     border-color: var(--cyan);
-    background: linear-gradient(135deg, rgba(0, 140, 230, 0.1), rgba(6, 64, 117, 0.1));
-    transform: scale(1.02);
+    background: white;
 }
 
 .drop-zone-content p {
@@ -85,7 +74,7 @@ h2 {
 
 .controls-section {
     padding: 0 40px 20px;
-    background: #f8f9fa;
+    background: white;
 }
 
 .controls-section label {
@@ -104,14 +93,12 @@ h2 {
     font-size: 1.3rem;
     background: white;
     cursor: pointer;
-    transition: border-color 0.3s ease;
     font-family: 'Rubik', sans-serif;
 }
 
 #columnSelect:focus {
     outline: none;
     border-color: var(--cyan);
-    box-shadow: 0 0 0 3px rgba(0, 140, 230, 0.1);
 }
 
 .chart-section {
@@ -128,18 +115,12 @@ h2 {
 }
 
 .stat-box {
-    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    background: var(--blue);
     color: white;
     padding: 30px 40px;
     border-radius: 12px;
     text-align: center;
-    box-shadow: 0 8px 25px rgba(0, 140, 230, 0.3);
     min-width: 200px;
-    transition: transform 0.3s ease;
-}
-
-.stat-box:hover {
-    transform: translateY(-3px);
 }
 
 .stat-label {
@@ -160,7 +141,6 @@ h2 {
     background: white;
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
     aspect-ratio: 4/3;
     position: relative;
