@@ -122,40 +122,45 @@ class CSVStatsVisualizer {
       const minDate = dates[0];
       const maxDate = dates[dates.length - 1];
 
-      const minDateString = minDate.toISOString().split("T")[0];
-      const maxDateString = maxDate.toISOString().split("T")[0];
+      // Format dates without timezone issues
+      const minDateString = this.formatDateForInput(minDate);
+      const maxDateString = this.formatDateForInput(maxDate);
 
       document.getElementById("dateFrom").value = minDateString;
       document.getElementById("dateTo").value = maxDateString;
     } else {
       // Fallback to current day if no valid dates found
       const today = new Date();
-      const todayString = today.toISOString().split("T")[0];
+      const todayString = this.formatDateForInput(today);
 
       document.getElementById("dateFrom").value = todayString;
       document.getElementById("dateTo").value = todayString;
     }
   }
 
+  formatDateForInput(date) {
+    // Format date as YYYY-MM-DD without timezone issues
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
   parseDate(dateString) {
     // Parse dates in format "DD.MM.YYYY, HH:MM" or similar
     if (!dateString || typeof dateString !== "string") {
-      console.log('Invalid dateString:', dateString);
       return null;
     }
 
     // Remove quotes if present
     const cleanDateString = dateString.replace(/['"]/g, "");
-    console.log('Clean date string:', cleanDateString);
 
     const match = cleanDateString.match(/(\d{1,2})\.(\d{1,2})\.(\d{4})/);
     if (match) {
       const [, day, month, year] = match;
       const parsedDate = new Date(year, month - 1, day); // month is 0-indexed in JS Date
-      console.log('Parsed date:', day, month, year, '→', parsedDate);
       return parsedDate;
     }
-    console.log('No date match found for:', cleanDateString);
     return null;
   }
 
@@ -168,7 +173,6 @@ class CSVStatsVisualizer {
 
   getFilteredData() {
     if (!this.dateColumn) {
-      console.log('No date column found');
       return this.csvData.data;
     }
 
@@ -176,42 +180,59 @@ class CSVStatsVisualizer {
     const dateToInput = document.getElementById("dateTo");
 
     if (!dateFromInput.value || !dateToInput.value) {
-      console.log('Date inputs empty, returning all data');
+      this.updateFilterResult(
+        this.csvData.data.length,
+        this.csvData.data.length,
+      );
       return this.csvData.data;
     }
 
     // Parse input dates correctly - split the YYYY-MM-DD format and create dates with local timezone
-    const fromDateParts = dateFromInput.value.split('-');
-    const toDateParts = dateToInput.value.split('-');
-    
-    const fromDate = new Date(parseInt(fromDateParts[0]), parseInt(fromDateParts[1]) - 1, parseInt(fromDateParts[2]));
-    const toDate = new Date(parseInt(toDateParts[0]), parseInt(toDateParts[1]) - 1, parseInt(toDateParts[2]));
-    
+    const fromDateParts = dateFromInput.value.split("-");
+    const toDateParts = dateToInput.value.split("-");
+
+    const fromDate = new Date(
+      parseInt(fromDateParts[0]),
+      parseInt(fromDateParts[1]) - 1,
+      parseInt(fromDateParts[2]),
+    );
+    const toDate = new Date(
+      parseInt(toDateParts[0]),
+      parseInt(toDateParts[1]) - 1,
+      parseInt(toDateParts[2]),
+    );
+
     // Set time to end of day for 'to' date to include the full day
     toDate.setHours(23, 59, 59, 999);
 
-    console.log('Filter range:', fromDate, 'to', toDate);
-    console.log('Date column:', this.dateColumn);
-
     const filteredData = this.csvData.data.filter((row) => {
       const dateValue = row[this.dateColumn];
-      console.log('Row date value:', dateValue);
-      
       const rowDate = this.parseDate(dateValue);
-      console.log('Parsed row date:', rowDate);
 
       if (!rowDate) {
-        console.log('Invalid date, excluding row');
         return false; // Exclude rows with invalid dates
       }
 
-      const isInRange = rowDate >= fromDate && rowDate <= toDate;
-      console.log('Date comparison:', rowDate, '>=', fromDate, '&&', rowDate, '<=', toDate, '=', isInRange);
-      return isInRange;
+      return rowDate >= fromDate && rowDate <= toDate;
     });
 
-    console.log('Filtered data length:', filteredData.length, 'out of', this.csvData.data.length);
+    this.updateFilterResult(filteredData.length, this.csvData.data.length);
     return filteredData;
+  }
+
+  updateFilterResult(filteredCount, totalCount) {
+    const filterResultElement = document.getElementById("filterResult");
+    const filterResultText = document.getElementById("filterResultText");
+
+    if (this.dateColumn && filteredCount !== totalCount) {
+      filterResultText.textContent = `Gefiltert: ${filteredCount} von ${totalCount} Einträgen`;
+      filterResultElement.style.display = "block";
+    } else if (this.dateColumn) {
+      filterResultText.textContent = `Alle ${totalCount} Einträge angezeigt`;
+      filterResultElement.style.display = "block";
+    } else {
+      filterResultElement.style.display = "none";
+    }
   }
 
   parseCSVLine(line) {
