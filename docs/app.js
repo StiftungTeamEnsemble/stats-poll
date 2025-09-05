@@ -113,7 +113,8 @@ class CSVStatsVisualizer {
 
   populateColumnSelect() {
     const select = document.getElementById("columnSelect");
-    select.innerHTML = '<option value="">Wählen Sie eine numerische Spalte...</option>';
+    select.innerHTML =
+      '<option value="">Wählen Sie eine numerische Spalte...</option>';
 
     this.csvData.headers.forEach((header) => {
       if (this.isNumericColumn(header)) {
@@ -179,8 +180,16 @@ class CSVStatsVisualizer {
     document.getElementById("medianValue").textContent =
       stats.median.toFixed(2);
 
-    // Prepare chart data with fixed x-axis from 1-10
-    const fixedLabels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+    // Generate dynamic range based on data min/max with constraints
+    const dataMin = Math.min(...values);
+    const dataMax = Math.max(...values);
+    const rangeMin = Math.min(dataMin, 1); // min should not be bigger than 1
+    const rangeMax = Math.max(dataMax, 10); // max should not be smaller than 10
+
+    const fixedLabels = [];
+    for (let i = rangeMin; i <= rangeMax; i++) {
+      fixedLabels.push(i.toString());
+    }
     const chartData = {
       labels: fixedLabels,
       datasets: [
@@ -403,13 +412,13 @@ class CSVStatsVisualizer {
 
     // Get the column name for the filename
     const columnName = document.getElementById("chartTitle").textContent;
-    const sanitizedColumnName = columnName.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const sanitizedColumnName = columnName.replace(/[^a-zA-Z0-9_-]/g, "_");
     const filename = `${sanitizedColumnName}.png`;
 
     // Create a link element and trigger download
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.download = filename;
-    link.href = this.chart.toBase64Image('image/png', 1);
+    link.href = this.chart.toBase64Image("image/png", 1);
     link.click();
   }
 
