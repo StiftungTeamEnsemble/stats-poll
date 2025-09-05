@@ -179,6 +179,106 @@ class CSVStatsVisualizer {
             }]
         };
 
+        // Custom plugin for vertical lines
+        const verticalLinesPlugin = {
+            id: 'verticalLines',
+            afterDraw: (chart) => {
+                const ctx = chart.ctx;
+                const xScale = chart.scales.x;
+                const yScale = chart.scales.y;
+
+                // Helper function to find the closest x position for a value
+                const getXPositionForValue = (targetValue) => {
+                    const labels = chart.data.labels;
+                    const numericLabels = labels.map(l => parseFloat(l));
+                    
+                    // Find exact match first
+                    const exactIndex = labels.indexOf(targetValue.toString());
+                    if (exactIndex !== -1) {
+                        return xScale.getPixelForValue(exactIndex);
+                    }
+                    
+                    // If no exact match, interpolate between closest values
+                    let leftIndex = -1, rightIndex = -1;
+                    
+                    for (let i = 0; i < numericLabels.length; i++) {
+                        if (numericLabels[i] <= targetValue) {
+                            leftIndex = i;
+                        }
+                        if (numericLabels[i] >= targetValue && rightIndex === -1) {
+                            rightIndex = i;
+                            break;
+                        }
+                    }
+                    
+                    if (leftIndex === -1 && rightIndex !== -1) {
+                        // Target is before all values
+                        return xScale.getPixelForValue(rightIndex) - (xScale.width / labels.length) * 0.5;
+                    } else if (rightIndex === -1 && leftIndex !== -1) {
+                        // Target is after all values
+                        return xScale.getPixelForValue(leftIndex) + (xScale.width / labels.length) * 0.5;
+                    } else if (leftIndex !== -1 && rightIndex !== -1) {
+                        // Interpolate between left and right
+                        const leftX = xScale.getPixelForValue(leftIndex);
+                        const rightX = xScale.getPixelForValue(rightIndex);
+                        const leftVal = numericLabels[leftIndex];
+                        const rightVal = numericLabels[rightIndex];
+                        
+                        if (leftVal === rightVal) return leftX;
+                        
+                        const ratio = (targetValue - leftVal) / (rightVal - leftVal);
+                        return leftX + (rightX - leftX) * ratio;
+                    }
+                    
+                    return null;
+                };
+
+                // Draw median line
+                const medianX = getXPositionForValue(stats.median);
+                if (medianX !== null && medianX >= xScale.left && medianX <= xScale.right) {
+                    ctx.save();
+                    ctx.strokeStyle = 'rgba(255, 99, 132, 1)';
+                    ctx.lineWidth = 3;
+                    ctx.setLineDash([5, 5]);
+                    ctx.beginPath();
+                    ctx.moveTo(medianX, yScale.top);
+                    ctx.lineTo(medianX, yScale.bottom);
+                    ctx.stroke();
+                    ctx.restore();
+
+                    // Add label
+                    ctx.save();
+                    ctx.fillStyle = 'rgba(255, 99, 132, 1)';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`Median: ${stats.median.toFixed(2)}`, medianX, yScale.top - 10);
+                    ctx.restore();
+                }
+
+                // Draw average line
+                const avgX = getXPositionForValue(stats.average);
+                if (avgX !== null && avgX >= xScale.left && avgX <= xScale.right) {
+                    ctx.save();
+                    ctx.strokeStyle = 'rgba(75, 192, 192, 1)';
+                    ctx.lineWidth = 3;
+                    ctx.setLineDash([10, 5]);
+                    ctx.beginPath();
+                    ctx.moveTo(avgX, yScale.top);
+                    ctx.lineTo(avgX, yScale.bottom);
+                    ctx.stroke();
+                    ctx.restore();
+
+                    // Add label
+                    ctx.save();
+                    ctx.fillStyle = 'rgba(75, 192, 192, 1)';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`Average: ${stats.average.toFixed(2)}`, avgX, yScale.top - 30);
+                    ctx.restore();
+                }
+            }
+        };
+
         const config = {
             type: 'bar',
             data: chartData,
@@ -200,6 +300,12 @@ class CSVStatsVisualizer {
                         title: {
                             display: true,
                             text: 'Frequency'
+                        },
+                        ticks: {
+                            stepSize: 1,
+                            callback: function(value) {
+                                return Number.isInteger(value) ? value : '';
+                            }
                         }
                     },
                     x: {
@@ -209,7 +315,8 @@ class CSVStatsVisualizer {
                         }
                     }
                 }
-            }
+            },
+            plugins: [verticalLinesPlugin]
         };
 
         // Destroy existing chart if it exists
