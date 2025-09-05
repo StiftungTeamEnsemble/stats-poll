@@ -109,7 +109,7 @@ class CSVStatsVisualizer {
 
   populateColumnSelect() {
     const select = document.getElementById("columnSelect");
-    select.innerHTML = '<option value="">Choose a numeric column...</option>';
+    select.innerHTML = '<option value="">Wählen Sie eine numerische Spalte...</option>';
 
     this.csvData.headers.forEach((header) => {
       if (this.isNumericColumn(header)) {
@@ -181,7 +181,7 @@ class CSVStatsVisualizer {
       labels: fixedLabels,
       datasets: [
         {
-          label: "Count",
+          label: "Anzahl",
           data: fixedLabels.map((label) => distribution[label] || 0),
           backgroundColor: "rgba(0, 140, 230, 0.6)", // cyan with opacity
           borderColor: "#008ce6", // cyan
@@ -300,7 +300,7 @@ class CSVStatsVisualizer {
           ctx.font = "bold 16px Rubik";
           ctx.textAlign = "center";
           ctx.fillText(
-            `Average: ${stats.average.toFixed(2)}`,
+            `Durchschnitt: ${stats.average.toFixed(2)}`,
             avgX,
             yScale.top - 30,
           );
