@@ -167,17 +167,32 @@ class CSVStatsVisualizer {
         document.getElementById('medianValue').textContent = stats.median.toFixed(2);
 
         // Prepare chart data
-        const sortedKeys = Object.keys(distribution).sort((a, b) => parseFloat(a) - parseFloat(b));
+        // const sortedKeys = Object.keys(distribution).sort((a, b) => parseFloat(a) - parseFloat(b));
+        // const chartData = {
+        //     labels: sortedKeys,
+        //     datasets: [{
+        //         label: 'Count',
+        //         data: sortedKeys.map(key => distribution[key]),
+        //         backgroundColor: 'rgba(0, 140, 230, 0.6)', // cyan with opacity
+        //         borderColor: '#008ce6', // cyan
+        //         borderWidth: 2
+        //     }]
+        // };
+
+
+        // Prepare chart data with fixed x-axis from 1-10
+        const fixedLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
         const chartData = {
-            labels: sortedKeys,
+            labels: fixedLabels,
             datasets: [{
                 label: 'Count',
-                data: sortedKeys.map(key => distribution[key]),
+                data: fixedLabels.map(label => distribution[label] || 0),
                 backgroundColor: 'rgba(0, 140, 230, 0.6)', // cyan with opacity
                 borderColor: '#008ce6', // cyan
                 borderWidth: 2
             }]
         };
+
 
         // Custom plugin for vertical lines
         const verticalLinesPlugin = {
