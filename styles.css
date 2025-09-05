@@ -153,7 +153,8 @@ h2 {
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    height: 500px;
+    width: 100%;
+    aspect-ratio: 4/3;
     position: relative;
 }
 
@@ -191,7 +192,7 @@ h2 {
     }
 
     .chart-container {
-        height: 400px;
+        aspect-ratio: 4/3;
         padding: 15px;
     }
 }

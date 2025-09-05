@@ -251,7 +251,7 @@ class CSVStatsVisualizer {
                     ctx.fillStyle = 'rgba(255, 99, 132, 1)';
                     ctx.font = 'bold 12px Arial';
                     ctx.textAlign = 'center';
-                    ctx.fillText(`Median: ${stats.median.toFixed(2)}`, medianX, yScale.top - 50);
+                    ctx.fillText(`Median: ${stats.median.toFixed(2)}`, medianX, yScale.top - 10);
                     ctx.restore();
                 }
 
@@ -273,7 +273,7 @@ class CSVStatsVisualizer {
                     ctx.fillStyle = 'rgba(75, 192, 192, 1)';
                     ctx.font = 'bold 12px Arial';
                     ctx.textAlign = 'center';
-                    ctx.fillText(`Average: ${stats.average.toFixed(2)}`, avgX, yScale.top - 70);
+                    ctx.fillText(`Average: ${stats.average.toFixed(2)}`, avgX, yScale.top - 30);
                     ctx.restore();
                 }
             }
@@ -284,7 +284,8 @@ class CSVStatsVisualizer {
             data: chartData,
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
+                aspectRatio: 16/9,
                 layout: {
                     padding: {
                         top: 80
@@ -292,8 +293,7 @@ class CSVStatsVisualizer {
                 },
                 plugins: {
                     title: {
-                        display: true,
-                        text: `Distribution of ${columnName}`
+                        display: false
                     },
                     legend: {
                         display: false
