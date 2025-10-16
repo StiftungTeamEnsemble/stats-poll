@@ -13,6 +13,8 @@ class CSVStatsVisualizer {
     const downloadButton = document.getElementById("downloadButton");
     const dateFromInput = document.getElementById("dateFrom");
     const dateToInput = document.getElementById("dateTo");
+    const minLabelInput = document.getElementById("minLabel");
+    const maxLabelInput = document.getElementById("maxLabel");
 
     // Drop zone events
     dropZone.addEventListener("click", () => fileInput.click());
@@ -36,6 +38,10 @@ class CSVStatsVisualizer {
       "change",
       this.handleDateFilterChange.bind(this),
     );
+
+    // Scale label changes
+    minLabelInput.addEventListener("input", this.handleLabelChange.bind(this));
+    maxLabelInput.addEventListener("input", this.handleLabelChange.bind(this));
 
     // Download button click
     downloadButton.addEventListener("click", this.downloadChart.bind(this));
@@ -165,6 +171,13 @@ class CSVStatsVisualizer {
   }
 
   handleDateFilterChange() {
+    const columnName = document.getElementById("columnSelect").value;
+    if (columnName) {
+      this.renderChart(columnName);
+    }
+  }
+
+  handleLabelChange() {
     const columnName = document.getElementById("columnSelect").value;
     if (columnName) {
       this.renderChart(columnName);
@@ -488,6 +501,48 @@ class CSVStatsVisualizer {
       },
     };
 
+    // Custom plugin for scale labels
+    const scaleLabelsPlugin = {
+      id: "scaleLabels",
+      afterDraw: (chart) => {
+        const ctx = chart.ctx;
+        const xScale = chart.scales.x;
+        const yScale = chart.scales.y;
+
+        const minLabel = document.getElementById("minLabel").value;
+        const maxLabel = document.getElementById("maxLabel").value;
+
+        if (minLabel || maxLabel) {
+          ctx.save();
+          ctx.fillStyle = "#064075";
+          ctx.font = "500 18px Rubik";
+
+          const labels = chart.data.labels;
+          const numericLabels = labels.map((l) => parseFloat(l));
+          const minValue = Math.min(...numericLabels);
+          const maxValue = Math.max(...numericLabels);
+
+          // Find the x positions for min and max values
+          const minIndex = labels.indexOf(minValue.toString());
+          const maxIndex = labels.indexOf(maxValue.toString());
+
+          if (minIndex !== -1 && minLabel) {
+            const minX = xScale.getPixelForValue(minIndex);
+            ctx.textAlign = "left";
+            ctx.fillText(minLabel, minX, yScale.bottom + 70);
+          }
+
+          if (maxIndex !== -1 && maxLabel) {
+            const maxX = xScale.getPixelForValue(maxIndex);
+            ctx.textAlign = "right";
+            ctx.fillText(maxLabel, maxX, yScale.bottom + 70);
+          }
+
+          ctx.restore();
+        }
+      },
+    };
+
     const config = {
       type: "bar",
       data: chartData,
@@ -498,6 +553,7 @@ class CSVStatsVisualizer {
         layout: {
           padding: {
             top: 80,
+            bottom: 40,
           },
         },
         plugins: {
@@ -554,7 +610,7 @@ class CSVStatsVisualizer {
           },
         },
       },
-      plugins: [verticalLinesPlugin],
+      plugins: [verticalLinesPlugin, scaleLabelsPlugin],
     };
 
     // Destroy existing chart if it exists
