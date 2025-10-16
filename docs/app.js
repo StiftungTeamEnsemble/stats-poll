@@ -515,7 +515,7 @@ class CSVStatsVisualizer {
         if (minLabel || maxLabel) {
           ctx.save();
           ctx.fillStyle = "#064075";
-          ctx.font = "500 18px Rubik";
+          ctx.font = "500 20px Rubik";
 
           const labels = chart.data.labels;
           const numericLabels = labels.map((l) => parseFloat(l));
@@ -528,13 +528,13 @@ class CSVStatsVisualizer {
 
           if (minIndex !== -1 && minLabel) {
             const minX = xScale.getPixelForValue(minIndex);
-            ctx.textAlign = "left";
+            ctx.textAlign = "center";
             ctx.fillText(minLabel, minX, yScale.bottom + 70);
           }
 
           if (maxIndex !== -1 && maxLabel) {
             const maxX = xScale.getPixelForValue(maxIndex);
-            ctx.textAlign = "right";
+            ctx.textAlign = "center";
             ctx.fillText(maxLabel, maxX, yScale.bottom + 70);
           }
 
